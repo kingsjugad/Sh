@@ -6,21 +6,19 @@ def encrypt(plaintext, key):
 
     for char in plaintext:
         if char.isalpha():
-            pt = ord(char.lower()) - ord('a')
             k = ord(key[key_index % key_length]) - ord('a')
-            ct = (pt + k) % 26
             if char.isupper():
-                encrypted_char = chr(ct + ord('A'))
+                pt = ord(char) - ord('A')
+                ct = (pt + k) % 26
+                result += chr(ct + ord('A'))
             else:
-                encrypted_char = chr(ct + ord('a'))
-
-            result += encrypted_char
-            key_index += 1
+                pt = ord(char) - ord('a')
+                ct = (pt + k) % 26
+                result += chr(ct + ord('a'))
+            key_index += 1  # Only increment on alphabetic characters
         else:
             result += char
-
     return result
-
 
 def decrypt(ciphertext, key):
     result = ""
@@ -30,30 +28,26 @@ def decrypt(ciphertext, key):
 
     for char in ciphertext:
         if char.isalpha():
-            ct = ord(char.lower()) - ord('a')
             k = ord(key[key_index % key_length]) - ord('a')
-            pt = (ct - k) % 26
             if char.isupper():
-                decrypted_char = chr(pt + ord('A'))
+                ct = ord(char) - ord('A')
+                pt = (ct - k) % 26
+                result += chr(pt + ord('A'))
             else:
-                decrypted_char = chr(pt + ord('a'))
-
-            result += decrypted_char
+                ct = ord(char) - ord('a')
+                pt = (ct - k) % 26
+                result += chr(pt + ord('a'))
             key_index += 1
         else:
             result += char
-
     return result
 
-
-
+# Main execution
 plaintext = input("Enter the plain text: ")   
 key = input("Enter the key: ")
 
-
 ciphertext = encrypt(plaintext, key)
 print("Encrypted Text:", ciphertext)
-
 
 decrypted_text = decrypt(ciphertext, key)
 print("Decrypted Text:", decrypted_text)
